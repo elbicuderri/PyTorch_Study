@@ -5,6 +5,8 @@ from torchvision import datasets, transforms
 from torchsummary import summary
 from torchviz import make_dot
 from torch.autograd import Variable
+import statistics
+import numpy as np
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -121,9 +123,32 @@ class MnistModel(nn.Module):
 
         return out
 
-model = MnistModel()
+model = MnistModel().to(device)
 
-InTensor = Variable(torch.randn(1, 3, 32, 32))
-make_dot(model(InTensor), params=dict(model.named_parameters())).render("model", format="png")
+# InTensor = Variable(torch.randn(1, 3, 32, 32))
+# make_dot(model(InTensor), params=dict(model.named_parameters())).render("model", format="png")
 
-summary(model, input_size=(3, 32, 32))
+# summary(model, input_size=(3, 32, 32))
+
+loss_fn = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+loss_dict = {}
+for i in range(1, 3):
+    loss_list = [] # losses of i'th epoch
+    for batch_idx, (img, label) in enumerate(train_loader):
+        img = img.to(device)
+        label = label.to(device)
+
+        output = model(img)
+        loss = loss_fn(output, label)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        loss_list.append(loss.item())
+
+    loss_dict[i] = loss_list
+
+    print(f"{i}th epoch's train loss : {statistics.mean(loss_dict[i]):.4f}")
