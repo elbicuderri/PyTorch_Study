@@ -1,9 +1,9 @@
 # PyTorch_Study
 
 
-[LSTM 설명](https://www.youtube.com/watch?v=8HyCNIVRbSU&feature=youtu.be)
+[LSTM visualization](https://www.youtube.com/watch?v=8HyCNIVRbSU&feature=youtu.be)
 
-[ResNet 시각화](http://ethereon.github.io/netscope/#/gist/db945b393d40bfa26006)
+[ResNet visualization](http://ethereon.github.io/netscope/#/gist/db945b393d40bfa26006)
 
 
 **model.eval() Vs with torch.no_grad()**
