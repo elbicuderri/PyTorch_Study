@@ -9,6 +9,8 @@
 **model.eval() Vs with torch.no_grad()**
 
 > 전자는 batchnorm과 dropout에 영향을 준다.
+>
 > 후자는 gradient계산(computation)을 멈춘다. 즉 memory와 speed에 영향을 준다.
+>
 > 이것을 고려하여 사용하면 될 것이다.
 
