@@ -8,7 +8,7 @@
 
 **model.eval() Vs with torch.no_grad()**
 
-> 전자는 batchnorm과 dropout에 영향을 준다.
+> 전자는 batchnorm과 dropout 같이 train과 eval시에 다르게 동작하는 layer에 영향을 준다.
 >
 > 후자는 gradient계산(computation)을 멈춘다. 즉 memory와 speed에 영향을 준다.
 >
