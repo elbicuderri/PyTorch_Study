@@ -9,7 +9,7 @@ https://www.notion.so/ResNet-13c65d4ff0a541448acce69d4454c86f#0f755b44ea9646f080
 
 20201219
 
-\*\*model.eval() Vs with torch.no_grad():\*\*
+ \*\*model.eval() Vs with torch.no_grad():\*\*
 
 전자는 batchnorm과 dropout에 영향을 준다.
 
