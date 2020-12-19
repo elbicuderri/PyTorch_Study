@@ -1,37 +1,11 @@
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, Dataset
-from torchvision import datasets, transforms
-from torchsummary import summary
-from torchviz import make_dot
-from torch.autograd import Variable
-import statistics
-import numpy as np
 
-# Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-input_size = 32
-batch_size = 64
-
-transform = transforms.Compose([
- transforms.Pad(4),
- transforms.RandomHorizontalFlip(),
- transforms.RandomCrop(32),
- transforms.ToTensor(),
- transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)) # only can do to tensor so keep order
-])
-
-train_dataset = datasets.CIFAR10('C:\data/cifar10', train=True, download=True, transform=transform)
-
-train_loader = DataLoader(
-    dataset= train_dataset,
-    batch_size=batch_size,
-    shuffle=True)
-
-class MnistModel(nn.Module):
+class SimpleResNet(nn.Module):
     def __init__(self):
-        super(MnistModel, self).__init__()
+        super(SimpleResNet, self).__init__()
 
         self.relu = nn.ReLU()
 
@@ -107,48 +81,43 @@ class MnistModel(nn.Module):
         out2 = self.block22(out2)
         out2 += res2
         out2 = self.relu(out2)
-        #out2 = nn.ReLU(out2, inplace=True)
 
         res3 = self.conv3(out2)
         out3 = self.block31(out2)
         out3 = self.block32(out3)
         out3 += res3
         out3 = self.relu(out3)
-        #out3 = nn.ReLU(out3, inplace=True)
 
         out3 = self.avg_pool(out3)
         out3 = self.flatten(out3)
-        #out3 = nn.Flatten()(out3)
         out = self.fc(out3)
 
         return out
 
-model = MnistModel().to(device)
 
-# InTensor = Variable(torch.randn(1, 3, 32, 32))
-# make_dot(model(InTensor), params=dict(model.named_parameters())).render("model", format="png")
+model = SimpleResNet().to(device)
 
-# summary(model, input_size=(3, 32, 32))
+optimizer = torch.optim.Adam(model.parameters())
 
-loss_fn = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+checkpoint = torch.load("checkpoint/resnet_cifar10_checkpoint_epoch_1.ckpt")
 
-loss_dict = {}
-for i in range(1, 3):
-    loss_list = [] # losses of i'th epoch
-    for batch_idx, (img, label) in enumerate(train_loader):
-        img = img.to(device)
-        label = label.to(device)
+model.load_state_dict(checkpoint['model_state_dict'])
 
-        output = model(img)
-        loss = loss_fn(output, label)
+optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+opt_list = []
+epochs = 50
 
-        loss_list.append(loss.item())
+for i in range(1, epochs + 1):
+    path = f"checkpoint/resnet_cifar10_checkpoint_epoch_{i}.ckpt"
+    optimizer = torch.optim.Adam(model.parameters())
+    optimizer.load_state_dict((torch.load(path))['optimizer_state_dict'])
+    opt_list.append(optimizer)
 
-    loss_dict[i] = loss_list
+print(model)
 
-    print(f"{i}th epoch's train loss : {statistics.mean(loss_dict[i]):.4f}")
+for weight in model.parameters():
+    print(weight)
+
+for name, weight in model.named_parameters():
+    print(name, weight)
