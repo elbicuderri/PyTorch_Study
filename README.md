@@ -13,7 +13,7 @@ https://www.notion.so/ResNet-13c65d4ff0a541448acce69d4454c86f#0f755b44ea9646f080
 
 전자는 batchnorm과 dropout에 영향을 준다.
 
-후자는 gradient계산(computation)을 멈춘다. 즉 memory와 speed에 영향을 준다.
+후자는 gradient계산(computation)을 멈춘다. 즉 \*\*memory\*\*와 speed에 영향을 준다.
 
 이것을 고려하여 사용하면 될 것이다.
 
