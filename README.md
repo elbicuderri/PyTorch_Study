@@ -15,7 +15,7 @@
 > 이것을 고려하여 사용하면 된다.
 
 
-**nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss Vs Focal Loss**
+**nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss() Vs Focal Loss**
 
 > 1번은 multi-class 문제에 쓰인다. 한 image에 한 class만 존재하는 경우.
 >
