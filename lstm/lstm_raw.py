@@ -21,9 +21,7 @@ class LSTMCell(nn.Module):
         self.tanh = nn.Tanh()
         
     def forward(self, input, hidden, cell):
-        
-        # batch = input.size(1)
-        
+                
         i = self.sigmoid(self.ii_layer(input) + self.hi_layer(hidden))
         f = self.sigmoid(self.if_layer(input) + self.hf_layer(hidden))
         g = self.tanh(self.ig_layer(input) + self.hg_layer(hidden))
@@ -32,10 +30,6 @@ class LSTMCell(nn.Module):
         cell_state = (f * cell) + (i * g) # hadamard product Not matmul
         hidden_state = out*self.tanh(cell_state)
         
-        # out = out.view(batch, self.hidden_size)
-        # hidden_state = hidden_state.view(batch, self.hidden_size)
-        # cell_state = cell_state.view(batch, self.hidden_size)
-
         return out, hidden_state, cell_state
     
 class LSTM(nn.Module): 

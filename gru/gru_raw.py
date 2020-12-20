@@ -6,34 +6,28 @@ class GRUCell(nn.Module):
         super(GRUCell, self).__init__()
         
         self.input_size = input_size
-        self.hidden_size = hidden_size.
+        self.hidden_size = hidden_size
         
-        self.rt_layer = nn.Linear(self.input_size + self.hidden_size, self.hidden_size)
-        self.zt_layer = nn.Linear(self.input_size + self.hidden_size, self.hidden_size)
-        
-        self.input_layer = nn.Linear(self.input_size, self.hidden_size)
-        self.hidden_layer = nn.Linear(self.hidden_size, self.hidden_size)
-        
-        
+        self.ir_layer = nn.Linear(self.input_size, self.hidden_size)
+        self.hr_layer = nn.Linear(self.hidden_size, self.hidden_size)
+        self.iz_layer = nn.Linear(self.input_size, self.hidden_size)
+        self.hz_layer = nn.Linear(self.hidden_size, self.hidden_size)
+        self.in_layer = nn.Linear(self.input_size, self.hidden_size)
+        self.hn_layer = nn.Linear(self.hidden_size, self.hidden_size)
+              
         self.sigmoid = nn.Sigmoid()
         self.tanh = nn.Tanh()
         
     def forward(self, input, hidden):
         
-        batch = input.size(0)
+        # batch = input.size(0)
+        # oneone = torch.ones(batch, self.hidden_size)
         
-        input = input.view(batch, self.input_size)
-        hidden = hidden.view(batch, self.input_size)
-        
-        combine = input + hidden
-        
-        rt = self.sigmoid(self.rt_layer(combine))
-        zt = self.sigmoid(self.zt_layer(combine))
-        
-        nt = self.tanh(self.input_layer(input) + rt * self.hidden_layer(hidden))
-        
-        oneone = torch.ones(batch, self.hidden_size)
-        
-        hidden_state = (oneone - zt) * nt + zt * hidden
+        r = self.sigmoid(self.ir_layer(input) + self.hr_layer(hidden))
+        z = self.sigmoid(self.iz_layer(input) + self.iz_layer(hidden))
+        n = self.tanh(self.in_layer(input) + r * self.hn_layer(hidden))
+        # hidden_state = (oneone - z) * n + z * hidden
+        # hidden_state = (n - n * z) + z * hidden 
+        hidden_state = n - z * (n - hidden)
         
         return hidden_state
