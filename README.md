@@ -25,4 +25,4 @@
 >
 > Binary Cross Entropy 라고도 하여 헷갈리기 쉽다. 조심. Sigmoid CE loss 라고도 함.
 >
-> 3번도 multi-label 문제 쓰인다. [논문참고](https://arxiv.org/abs/1708.02002)
+> 3번도 multi-label 문제에 쓰인다. [논문참고](https://arxiv.org/abs/1708.02002)
