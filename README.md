@@ -21,7 +21,7 @@
 >
 > tf.keras와 다르게 pytorch는 마지막 layer에 softmax 없이 사용해도 같이 계산해준다.
 >
-> 2번은 mulit-label 문제에 쓰인다. 한 image에 여러 class가 존재하는 경우. [reference](https://discuss.pytorch.org/t/multi-label-classification-in-pytorch/905/28)
+> 2번은 mulit-label 문제에 쓰인다. 한 image에 여러 class가 존재하는 경우.
 >
 > Binary Cross Entropy 라고도 하여 헷갈리기 쉽다. 조심. Sigmoid CE loss 라고도 함.
 >
