@@ -33,3 +33,7 @@ cc[:, 1, :] += 3
 
 print(cc)
 
+if (cc.size() == (2, 2, 2)):
+    print("Hi")
+# print()
+
