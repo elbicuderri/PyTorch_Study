@@ -14,3 +14,11 @@
 >
 > 이것을 고려하여 사용하면 된다.
 
+
+**nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss Vs Focal Loss
+
+> 1번은 multi-class 문제에 쓰인다. 한 image에 한 class만 존재하는 경우.
+> tf.keras와 다르게 pytorch는 마지막 layer에 softmax 없이 사용해도 같이 계산해준다.
+> 2번은 mulit-label 문제에 쓰인다. 한 image에 여러 class가 존재하는 경우. [reference](https://discuss.pytorch.org/t/multi-label-classification-in-pytorch/905/28)
+> Binary Cross Entropy 라고도 하여 헷갈리기 쉽다. 조심. Sigmoid CE loss 라고도 함.
+> 3번도 multi-label 문제 쓰인다. [논문참고](https://arxiv.org/abs/1708.02002)
