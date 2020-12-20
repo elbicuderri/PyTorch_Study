@@ -23,14 +23,14 @@ transform = transforms.Compose([
  transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)) # only can do to tensor so keep order
 ])
 
-train_dataset = datasets.CIFAR10('C:\data/cifar10', train=True, download=True, transform=transform)
+train_dataset = datasets.CIFAR10('C:\data/cifar10/train/', train=True, download=True, transform=transform)
 
 train_loader = DataLoader(
     dataset= train_dataset,
     batch_size=batch_size,
     shuffle=True)
 
-valid_dataset = datasets.CIFAR10(root='C:\data/',
+valid_dataset = datasets.CIFAR10(root='C:\data/cifar10/test/',
                                             train=False, 
                                             transform=transforms.ToTensor())
 
