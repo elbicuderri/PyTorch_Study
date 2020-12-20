@@ -155,10 +155,10 @@ epochs = 50
 for i in range(1, epochs + 1):
     loss_list = [] # losses of i'th epoch
     for train_step_idx, (img, label) in enumerate(train_loader):
-        
         img = img.to(device)
         label = label.to(device)
-
+        
+        model.train()
         output = model(img)
         loss = loss_fn(output, label)
 
@@ -178,7 +178,8 @@ for i in range(1, epochs + 1):
         for val_step_idx, (val_img, val_label) in enumerate(valid_loader):
             val_img = val_img.to(device)
             val_label = val_label.to(device)
-
+            
+            model.eval()
             val_output = model(val_img)
             val_loss = loss_fn(val_output, val_label)
             scheduler.step(val_loss)

@@ -103,6 +103,8 @@ checkpoint = torch.load("checkpoint/resnet_cifar10_checkpoint_epoch_1.ckpt")
 
 model.load_state_dict(checkpoint['model_state_dict'])
 
+model.eval()
+
 optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
 
 opt_list = []
