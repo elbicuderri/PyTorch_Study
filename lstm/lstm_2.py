@@ -51,46 +51,48 @@ class LSTM(nn.Module):
         seq_len = input.size(0)  
         batch = input.size(1)
                 
-        outs = torch.zeros(seq_len, batch, self.hidden_size) # (seq_len, batch, hidden_size)
+        out_list = torch.zeros(seq_len, batch, self.hidden_size) # (seq_len, batch, hidden_size)
         # hidden_states = torch.zeros(self.num_layers, batch, self.hidden_size) # (num_layers, batch, hidden_size)
         # cell_states = torch.zeros(self.num_layers, batch, self.hidden_size) # (num_layers, batch, hidden_size)
 
         for l in range(seq_len):
-            # h_pre, c_pre = None, None
-            out_sum = torch.zeros(1, batch, self.hidden_size)
-            for n in range(self.num_layers):
-                if (n == 0 and l == 0):
-                    zero_tensor = torch.zeros(1, batch, self.hidden_size)
-                    # hidden_states[:, :, :] += h_pre
-                    # cell_states[:, :, :] += c_pre
-                    o_n, h_n, c_n = self.lstm_cell(input[0,:,:], zero_tensor, zero_tensor)
-                    assert (o_n.size() == (1, batch, self.hidden_size) and 
-                            h_n.size() == (1, batch, self.hidden_size) and
-                            c_n.size() == (1, batch, self.hidden_size))
+            # out_list = torch.zeros(seq_len, batch, self.hidden_size)
 
-                elif ( n != 0 and l == 0):
-                    zero_tensor = torch.zeros(1, batch, self.hidden_size)
-                    o_n, h_n, c_n = self.lstm_cell(h_pre, zero_tensor, zero_tensor)
-                    
-                else:
-                    h_pre = torch.zeros(1, batch, self.hidden_size)
-                    c_pre = torch.zeros(1, batch, self.hidden_size)
-                    o_n, h_n, c_n = self.lstm_cell(h_pre, h_pre, c_pre) # output (1, batch, hidden_size)
-                    assert (o_n.size() == (1, batch, self.hidden_size) and 
-                            h_n.size() == (1, batch, self.hidden_size) and
-                            c_n.size() == (1, batch, self.hidden_size))
-                    # outs[:, :, :] += o_n # (1, batch, hidden_size)
-                    
-                    # hidden_states[:, :, :] += h_n # (1, batch, hidden_size)
-                    # cell_states[:, :, :] += c_n # (1, batch, hidden_size)
-                    
-                    h_pre, c_pre = h_n, c_n
-            
-                out_sum += o_n 
+            zero_tensor = torch.zeros(1, batch, self.hidden_size)
+            h_previous = torch.zeros(1, batch, self.hidden_size)
+            c_previous = torch.zeros(1, batch, self.hidden_size)
+
+            h_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) hidden states list
+            c_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) cell states list
+
+            if (l == 0):
+                for layer_num in range(self.num_layers):
+                    if (layer_num == 0):
+                        o_previous, h_previous, c_previous = self.lstm_cell(input[0,:,:], zero_tensor, zero_tensor)
+                        h_previous_list[0,:,:] = h_previous # hidden states list update
+                        c_previous_list[0,:,:] = c_previous # cell states list update
+                    else:
+                        o_previous, h_previous, c_previous = self.lstm_cell(h_previous, zero_tensor, zero_tensor)
+                        h_previous_list[layer_num,:,:] = h_previous # hidden states list update
+                        c_previous_list[layer_num,:,:] = c_previous # cell states list update
+
+                out_list[0,:,:] = h_previous[-1,:,:]
+
+            else:
+                for layer_num in range(self.num_layers):
+                    if (layer_num == 0):
+                        o_previous, h_previous, c_previous = self.lstm_cell(input[l,:,:], h_previous_list[0,:,:], c_previous_list[0,:,:])
+                        h_previous_list[0,:,:] = h_previous # hidden states list update
+                        c_previous_list[0,:,:] = c_previous # cell states list update
+
+                    else:
+                        o_previous, h_previous, c_previous = self.lstm_cell(h_previous, h_previous_list[layer_num,:,:], c_previous_list[layer_num,:,:])
+                        h_previous_list[layer_num,:,:] = h_previous # hidden states list update
+                        c_previous_list[layer_num,:,:] = c_previous # cell states list update
                 
-            outs[l, :, :] = out_sum
+                out_list[seq_len,:,:] = h_previous_list[-1,:,:]
                                                      
-        return outs
+        return out_list
     
 
 seq_len = 100
@@ -106,4 +108,3 @@ model = LSTM(input_size=input_size, hidden_size=hidden_size, num_layers=num_laye
 out = model(InTensor)
 
 print(out.size())
-    
