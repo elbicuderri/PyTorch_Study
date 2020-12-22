@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 
 #Fully Connected Layer 
-
 a = torch.randn(32, 3, 228, 228)
 
 b = torch.randn(32, 228, 228, 3)
