@@ -35,20 +35,58 @@
 ```python
 import torch
 
-#Fully Connected Layer 
-a = torch.randn(32, 3, 228, 228)
+#sum of tensor
+x = torch.randn(3, 5)
 
-b = torch.randn(32, 228, 228, 3)
+sum_of_tensor = torch.einsum("ij ->", x)
 
-w1 = torch.randn(10, 3 * 228 * 228)
+print(sum_of_tensor)
 
-w2 = torch.randn(228 * 228 * 3, 10)
+#transpose!!
+xx = torch.einsum("ij -> ji", x)
 
-y1 = torch.einsum("nchw, kchw-> nk", a, w1.reshape(10, 3, 228, 228)) #PyTorch
+print(x)
+print(xx)
 
-y2 = torch.einsum("nhwc, hwck-> nk", b, w2.reshape(228, 228, 3, 10)) #TensorFlow
+#sum by column
+sum_by_column = torch.einsum("ij -> j", x)
 
-print(y1.size())
+print(sum_by_column)
 
-print(y2.size())
+#sum by row
+sum_by_row = torch.einsum("ij -> i", x)
+
+print(sum_by_row)
+
+#matrix-matrix multiplication
+a = torch.randn(127, 34)
+b = torch.rand(13, 34)
+
+c = torch.einsum("ij, kj -> ik", a, b)
+
+print(c.shape)
+
+#matrix-matrix element-wise multiplication
+aa = torch.randn(14, 34)
+bb = torch.randn(14, 34)
+
+cc = torch.einsum("ij, ij -> ij", aa, bb)
+
+print(cc.shape)
+
+#dot product
+aa = torch.randn(14, 34)
+bb = torch.randn(14, 34)
+
+cc = torch.einsum("ij, ij -> ", aa, bb)
+
+print(cc.shape)
+
+#batch matrix multiplication
+p = torch.randn(3, 2, 5)
+q = torch.randn(3, 5, 3)
+
+r = torch.einsum("nij, njk -> nik", p, q)
+
+print(r.shape)
 ```
