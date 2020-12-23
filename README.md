@@ -72,6 +72,8 @@ make_dot(model(InTensor), params=dict(model.named_parameters())).render("model",
 >
 > 일단 찾아낸 방법...
 >
+> 정확하지 않은데... 약간 더 세밀한 debugging이 필요하다...
+>
 
 ```python
 mean_list = []
