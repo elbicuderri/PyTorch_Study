@@ -169,3 +169,5 @@ r = torch.einsum("nij, njk -> nik", p, q)
 print(r.shape)
 ```
 ~~이거 뭐 사기 아니냐~~
+
+[docker study 용 github](https://github.com/open-mmlab/mmdetection/tree/master/docker)
