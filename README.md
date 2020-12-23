@@ -78,11 +78,11 @@ mean_list = []
 var_list = []
 
 for epoch in range(epochs):
-    # 대충 training loop...
+    # 대충 train loop...
         model.train()
         mean = model.batchnorm.running_mean.clone()
         variance = model.batchnorm.running_var.clone()
-    # 대충 evaluate loop...
+    # 대충 evaluation loop...
         model.eval()
             mean_list.append(mean)
             var_list.append(variance)
