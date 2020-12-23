@@ -16,7 +16,7 @@
         optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
  
-**nn.CategoricalCrossentropy() == nn.logsoftmax() + nn.nLLLos()**
+**nn.CategoricalCrossentropy() == nn.LogSoftmax() + nn.nLLLos()**
 >
 > 이 두 방식은 똑같다.
 >
@@ -24,9 +24,10 @@
 >
 > nn.CategoricalCrossentropy() 이 다 계산해준다!!
 >
-> 계산을 어떻게 해주는 지 뭐 알아서 찾아보세요..
+> 계산을 어떻게 해주는 지 알아서 찾아보시길..
 >
-
+> 특히 옛날 코드들에 후자로 되 있는 경우가 많은데, speed상 전자가 빠르고 사용을 권장한다고 한다.
+>
 
 **batch size가 커서 memory가 터져버릴 때**
 >
