@@ -1,7 +1,7 @@
 # PyTorch_Study
 
 
-## 외우자 이 아홉줄
+### 외우자 이 아홉줄
 
 ```python
     for i, (img, label) in enumerate(train_loader):
