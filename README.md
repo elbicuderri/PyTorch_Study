@@ -1,6 +1,6 @@
 # PyTorch_Study
 
-**외우자 이 **
+**외우자 이 아홉줄**
 
 ```python
     for i, (img, label) in enumerate(train_loader):
@@ -11,9 +11,9 @@
         out = model(img)
         loss = loss_fn(out, label)
 
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        optimizer.zero_grad() ## gradient initialized
+        loss.backward() ## back propagation 
+        optimizer.step() ## weight update ( w(t) = w(t-1) - lr * gradient )
  ```
 
 **batch size가 커서 memory가 터져버릴 때**
