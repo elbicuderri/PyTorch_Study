@@ -1,7 +1,7 @@
 # PyTorch_Study
 
 
-**외우자 이 아홉줄**
+## 외우자 이 아홉줄
 
 ```python
     for i, (img, label) in enumerate(train_loader):
@@ -18,7 +18,7 @@
  ```
  
  
-**nn.CrossEntropyLoss() == nn.LogSoftmax() + nn.nLLLos()**
+## nn.CrossEntropyLoss() == nn.LogSoftmax() + nn.nLLLos()
 >
 > 이 두 방식은 똑같다.
 >
@@ -32,7 +32,7 @@
 >
 
 
-**batch size가 커서 memory가 터져버릴 때**
+## batch size가 커서 memory가 터져버릴 때
 >
 > 원래 batch size를 한 epoch 마다 말고
 >
@@ -40,8 +40,8 @@
 >
 
 
-**model.eval() Vs with torch.no_grad()**
-
+## model.eval() Vs with torch.no_grad()
+>
 > 전자는 batchnorm과 dropout 같이 train과 eval시에 다르게 동작하는 layer에 영향을 준다.
 >
 > 후자는 gradient계산(computation)을 멈춘다. 즉 memory와 speed에 영향을 준다.
@@ -54,7 +54,7 @@
 >
 
 
-**PyTorch에서 batchnorm의 mean과 var를 얻기가 은근 어렵다**
+## PyTorch에서 batchnorm의 mean과 var를 얻기가 은근 어렵다
 >
 > 일단 찾아낸 방법...
 >
@@ -75,8 +75,8 @@ for epoch in range(epochs):
 ```
 
 
-**nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss() Vs Focal Loss**
-
+## nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss() Vs Focal Loss
+>
 > 1번은 multi-class 문제에 쓰인다. 한 image에 한 class만 존재하는 경우.
 >
 > tf.keras와 다르게 pytorch는 마지막 layer에 softmax 없이 사용해도 같이 계산해준다.
@@ -89,7 +89,7 @@ for epoch in range(epochs):
 >
 
 
-**einsum is all you need**
+## einsum is all you need
 > 꼭 써라 두 번 써라
 >
 > 바로 예제 코드를 보자
