@@ -1,5 +1,21 @@
 # PyTorch_Study
 
+**외우자 이 **
+
+```python
+    for i, (img, label) in enumerate(train_loader):
+        img = img.to(device)
+        label = label.to(device)
+        
+        model.train()
+        out = model(img)
+        loss = loss_fn(out, label)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+ ```
+
 **batch size가 커서 memory가 터져버릴 때**
 >
 > 한 epoch말고
@@ -28,6 +44,8 @@
 > Binary Cross Entropy 라고도 하여 헷갈리기 쉽다. 조심. Sigmoid CE loss 라고도 함.
 >
 > 3번도 multi-label 문제에 쓰인다. [논문참고](https://arxiv.org/abs/1708.02002)
+
+
 
 **einsum is all you need**
 > 꼭 써라 두 번 써라
