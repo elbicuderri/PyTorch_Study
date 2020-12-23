@@ -31,9 +31,9 @@
 
 **batch size가 커서 memory가 터져버릴 때**
 >
-> 한 epoch말고
+> 원래 batch size를 한 epoch 마다 말고
 >
-> 두~세(혹은 그 이상) epoch마다 loss를 accumulate 하면 된다.
+> 그 batch size를 1/2 혹은 1/3으로 쪼개서 2~3(혹은 그 이상) epoch마다 loss를 accumulate 하면 된다.
 >
 
 
