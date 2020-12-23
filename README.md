@@ -13,7 +13,7 @@
 
         optimizer.zero_grad() ## gradient initialized
         loss.backward() ## back propagation 
-        optimizer.step() ## weight update ( w(t) = w(t-1) - lr * gradient )
+        optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
 
 **batch size가 커서 memory가 터져버릴 때**
