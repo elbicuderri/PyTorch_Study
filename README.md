@@ -12,7 +12,7 @@
         loss = loss_fn(out, label)
 
         optimizer.zero_grad() ## gradient initialized
-        loss.backward() ## back propagation 
+        loss.backward() ## back propagation ( gradient updated )
         optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
  
