@@ -13,12 +13,17 @@ import numpy as np
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(device)
 
-batch_size = 100
+batch_size = 32
+
+# transform = transforms.Compose([
+#  transforms.Pad(4),
+#  transforms.RandomHorizontalFlip(),
+#  transforms.RandomCrop(32),
+#  transforms.ToTensor(),
+#  transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)) # only can do to tensor so keep order
+# ])
 
 transform = transforms.Compose([
- transforms.Pad(4),
- transforms.RandomHorizontalFlip(),
- transforms.RandomCrop(32),
  transforms.ToTensor(),
  transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)) # only can do to tensor so keep order
 ])
@@ -33,8 +38,7 @@ train_loader = DataLoader(
 valid_dataset = datasets.CIFAR10(root='C:\data/cifar10/test/',
                                             train=False, 
                                             download=True,
-                                            transform=transforms.Compose([transforms.ToTensor(),
-                                            transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))]))
+                                            transform=transform)
 
 valid_loader = DataLoader(dataset=valid_dataset,
                                           batch_size=batch_size,
@@ -177,9 +181,10 @@ for i in range(1, epochs + 1):
 
     loss_dict[i] = loss_list
 
-    with torch.no_grad():
-        val_loss_list = []
-        for val_step_idx, (val_img, val_label) in enumerate(valid_loader):
+    
+    val_loss_list = []
+    for val_step_idx, (val_img, val_label) in enumerate(valid_loader):
+        with torch.no_grad():
             val_img = val_img.to(device)
             val_label = val_label.to(device)
             
@@ -188,17 +193,17 @@ for i in range(1, epochs + 1):
             val_loss = loss_fn(val_output, val_label)
             scheduler.step(val_loss)
 
-            val_loss_list.append(val_loss.item())
+        val_loss_list.append(val_loss.item())
 
-        val_loss_dict[i] = val_loss_list
-        
-        # best_loss = mean(val_loss_dict[i])
-        torch.save({
-            f"epoch": i,
-            f"model_state_dict": model.state_dict(),
-            f"optimizer_state_dict": optimizer.state_dict(),
-            f"loss": loss},
-             f"checkpoint/resnet_cifar10_checkpoint_epoch_{i}.ckpt")
+    val_loss_dict[i] = val_loss_list
+    
+    # best_loss = mean(val_loss_dict[i])
+    torch.save({
+        f"epoch": i,
+        f"model_state_dict": model.state_dict(),
+        f"optimizer_state_dict": optimizer.state_dict(),
+        f"loss": loss},
+            f"checkpoint/resnet_cifar10_checkpoint_epoch_{i}.ckpt")
 
 
     print(f"Epoch [{i}] Train Loss: {mean(loss_dict[i]):.4f} Val Loss: {mean(val_loss_dict[i]):.4f}")
