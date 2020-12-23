@@ -1,9 +1,11 @@
 # PyTorch_Study
 
-
-[LSTM visualization](https://www.youtube.com/watch?v=8HyCNIVRbSU&feature=youtu.be)
-
-[ResNet visualization](http://ethereon.github.io/netscope/#/gist/db945b393d40bfa26006)
+**batch size가 커서 memory가 터져버릴 때**
+>
+> 한 epoch말고
+>
+> 두~세 epoch마다 loss를 accumulate 하면 된다. code로 구현은 시간나면^^
+>
 
 
 **model.eval() Vs with torch.no_grad()**
