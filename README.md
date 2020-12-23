@@ -50,6 +50,26 @@
 > train loop로 다시 들어갈땐 model.train()으로 mode를 다시 바꾸는 건 잊지 말자
 >
 
+**PyTorch에서 batchnorm의 mean과 var를 얻기가 은근 어렵다**
+>
+> 일단 찾아낸 방법...
+>
+
+```python
+mean_list = []
+var_list = []
+
+for epoch in range(epochs):
+    # 대충 training loop...
+        model.train()
+        mean = model.batchnorm.running_mean.clone()
+        variance = model.batchnorm.running_var.clone()
+    # 대충 evaluate loop...
+        model.eval()
+            mean_list.append(mean)
+            var_list.append(variance)
+```
+
 **nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss() Vs Focal Loss**
 
 > 1번은 multi-class 문제에 쓰인다. 한 image에 한 class만 존재하는 경우.
