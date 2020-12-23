@@ -1,5 +1,6 @@
 # PyTorch_Study
 
+
 **외우자 이 아홉줄**
 
 ```python
@@ -16,6 +17,7 @@
         optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
  
+ 
 **nn.CrossEntropyLoss() == nn.LogSoftmax() + nn.nLLLos()**
 >
 > 이 두 방식은 똑같다.
@@ -28,6 +30,7 @@
 >
 > 특히 옛날 코드들에 후자로 되어 있는 경우가 많은데, speed상 전자가 빠르니 사용을 권장한다고 한다.
 >
+
 
 **batch size가 커서 memory가 터져버릴 때**
 >
@@ -50,6 +53,7 @@
 > train loop로 다시 들어갈땐 model.train()으로 mode를 다시 바꾸는 건 잊지 말자
 >
 
+
 **PyTorch에서 batchnorm의 mean과 var를 얻기가 은근 어렵다**
 >
 > 일단 찾아낸 방법...
@@ -69,6 +73,7 @@ for epoch in range(epochs):
             mean_list.append(mean)
             var_list.append(variance)
 ```
+
 
 **nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss() Vs Focal Loss**
 
