@@ -44,7 +44,11 @@
 > 후자는 gradient계산(computation)을 멈춘다. 즉 memory와 speed에 영향을 준다.
 >
 > 이것을 고려하여 사용하면 된다.
-
+>
+> 대개의 경우 훈련 시 validation loop를 만든다면 두개를 둘 다 키는 게 맞다고 본다.
+>
+> train loop로 다시 들어갈땐 model.train()으로 mode를 다시 바꾸는 건 잊지 말자
+>
 
 **nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss() Vs Focal Loss**
 
