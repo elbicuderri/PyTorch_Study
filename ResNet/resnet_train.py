@@ -32,7 +32,9 @@ train_loader = DataLoader(
 
 valid_dataset = datasets.CIFAR10(root='C:\data/cifar10/test/',
                                             train=False, 
-                                            transform=transforms.ToTensor())
+                                            download=True,
+                                            transform=transforms.Compose([transforms.ToTensor(),
+                                            transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))]))
 
 valid_loader = DataLoader(dataset=valid_dataset,
                                           batch_size=batch_size,
@@ -103,10 +105,11 @@ class SimpleResNet(nn.Module):
         )
 
         self.avg_pool = nn.AvgPool2d(8)
-        self.flatten = nn.Flatten()
+        # self.flatten = nn.Flatten()
         self.fc = nn.Linear(64, 10)
 
     def forward(self, x):
+        batch = x.size(0)
         out0 = self.conv0(x)
         out1 = self.block11(out0)
         out1 = self.block12(out1)
@@ -124,7 +127,8 @@ class SimpleResNet(nn.Module):
         out3 = self.relu(out3)
 
         out3 = self.avg_pool(out3)
-        out3 = self.flatten(out3)
+        # out3 = self.flatten(out3)
+        out3 = out3.view(batch, -1)
         out = self.fc(out3)
 
         return out
@@ -150,7 +154,7 @@ loss_dict = {}
 val_loss_dict = {}
 train_step = len(train_loader)
 val_step = len(valid_loader)
-epochs = 50
+epochs = 5
 
 for i in range(1, epochs + 1):
     loss_list = [] # losses of i'th epoch
