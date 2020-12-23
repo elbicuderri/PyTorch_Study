@@ -16,7 +16,7 @@
         optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
  
-**nn.CategoricalCrossentropy() == nn.LogSoftmax() + nn.nLLLos()**
+**nn.CrossEntropyLoss() == nn.LogSoftmax() + nn.nLLLos()**
 >
 > 이 두 방식은 똑같다.
 >
