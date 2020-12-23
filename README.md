@@ -15,6 +15,18 @@
         loss.backward() ## back propagation 
         optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
+ 
+**nn.CategoricalCrossentropy() == nn.logsoftmax() + nn.nLLLos()**
+>
+> 이 두 방식은 똑같다.
+>
+> 그러니까 pytorch에서는 마지막 activation 으로 **softmax을 쓸 필요 없다!!!**
+>
+> nn.CategoricalCrossentropy() 이 다 계산해준다!!
+>
+> 계산을 어떻게 해주는 지 뭐 알아서 찾아보세요..
+>
+
 
 **batch size가 커서 memory가 터져버릴 때**
 >
@@ -44,14 +56,14 @@
 > Binary Cross Entropy 라고도 하여 헷갈리기 쉽다. 조심. Sigmoid CE loss 라고도 함.
 >
 > 3번도 multi-label 문제에 쓰인다. [논문참고](https://arxiv.org/abs/1708.02002)
-
+>
 
 
 **einsum is all you need**
 > 꼭 써라 두 번 써라
 >
 > 바로 예제 코드를 보자
-
+>
 ```python
 import torch
 
@@ -110,3 +122,4 @@ r = torch.einsum("nij, njk -> nik", p, q)
 
 print(r.shape)
 ```
+~~이거 뭐 사기 아니냐~~
