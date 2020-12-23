@@ -17,7 +17,21 @@
         optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
  
- 
+
+### model.summary() 하는 법
+```python
+from torchsummary import summary
+from torchviz import make_dot
+from torch.autograd import Variable
+
+model = SimpleResNet().to(device)
+summary(model, input_size=(3, 32, 32))
+
+InTensor = Variable(torch.randn(1, 3, 32, 32)).to(device)
+make_dot(model(InTensor), params=dict(model.named_parameters())).render("model", format="png")
+```
+
+
 ### nn.CrossEntropyLoss() == nn.LogSoftmax() + nn.nLLLos()
 >
 > 이 두 방식은 똑같다.
