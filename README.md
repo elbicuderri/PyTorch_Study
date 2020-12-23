@@ -38,9 +38,9 @@ make_dot(model(InTensor), params=dict(model.named_parameters())).render("model",
 >
 > 그러니까 pytorch에서는 마지막 activation 으로 **softmax를 쓸 필요 없다!!!**
 >
-> nn.CategoricalCrossentropy() 이 다 계산해준다!!
+> nn.CrossEntropyLoss()가 다 계산해준다!!
 >
-> 계산을 어떻게 해주는 지는 알아서 찾아보시길..
+> 계산을 어떻게 해주는 지는 알아서 찾아보시길.. (계산 식 쓰면 머리만 아프니...)
 >
 > 특히 옛날 코드들에 후자로 되어 있는 경우가 많은데, speed상 전자가 빠르니 사용을 권장한다고 한다.
 >
