@@ -33,7 +33,7 @@
 >
 > 한 epoch말고
 >
-> 두~세 epoch마다 loss를 accumulate 하면 된다. code로 구현은 시간나면^^
+> 두~세(혹은 그 이상) epoch마다 loss를 accumulate 하면 된다.
 >
 
 
