@@ -14,7 +14,7 @@
 
         optimizer.zero_grad() ## gradient initialized (어디에 있든 loss.backward() 앞에만 있으면 된다)
         loss.backward() ## back propagation (gradient updated)
-        optimizer.step() ## weight updated (w(t) = w(t-1) - lr * gradient)
+        optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized))
  ```
 ### torch.nn VS torch.nn.functional
 >
