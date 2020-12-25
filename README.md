@@ -57,7 +57,7 @@ make_dot(model(InTensor), params=dict(model.named_parameters())).render("model",
 >
 
 
-### model.eval() Vs with torch.no_grad()
+### model.eval() VS with torch.no_grad()
 >
 > 전자는 batchnorm과 dropout 같이 train과 eval시에 다르게 동작하는 layer에 영향을 준다.
 >
@@ -71,7 +71,7 @@ make_dot(model(InTensor), params=dict(model.named_parameters())).render("model",
 >
 
 
-### PyTorch에서 batchnorm의 mean과 var를 얻기가 은근 어렵다
+### PyTorch에서 batchnorm의 mean과 variance를 얻기가 은근 어렵다
 >
 > 일단 찾아낸 방법...
 >
@@ -80,7 +80,7 @@ make_dot(model(InTensor), params=dict(model.named_parameters())).render("model",
 
 ```python
 mean_list = []
-var_list = []
+variance_list = []
 
 for epoch in range(epochs):
     # 대충 train loop...
@@ -90,11 +90,11 @@ for epoch in range(epochs):
     # 대충 evaluation loop...
         model.eval()
             mean_list.append(mean)
-            var_list.append(variance)
+            variance_list.append(variance)
 ```
 
 
-### nn.CrossEntropyLoss() Vs nn.BCEWithLogitsLoss() Vs Focal Loss
+### nn.CrossEntropyLoss() VS nn.BCEWithLogitsLoss() VS Focal Loss
 >
 > 1번은 multi-class 문제에 쓰인다. 한 image에 한 class만 존재하는 경우.
 >
