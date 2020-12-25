@@ -16,7 +16,10 @@
         loss.backward() ## back propagation ( gradient updated )
         optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
  ```
- 
+### torch.nn VS torch.nn.functional
+>
+> **결론만 말하면 nn으로 통일해서 쓰자**
+> 
 
 ### model.summary() 하는 법
 ```python
