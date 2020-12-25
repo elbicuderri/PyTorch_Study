@@ -12,9 +12,9 @@
         out = model(img)
         loss = loss_fn(out, label)
 
-        optimizer.zero_grad() ## gradient initialized ( 이게 어디에 있든 loss.backward() 앞에만 있으면 된다 )
-        loss.backward() ## back propagation ( gradient updated )
-        optimizer.step() ## weight updated ( w(t) = w(t-1) - lr * gradient )
+        optimizer.zero_grad() ## gradient initialized (어디에 있든 loss.backward() 앞에만 있으면 된다)
+        loss.backward() ## back propagation (gradient updated)
+        optimizer.step() ## weight updated (w(t) = w(t-1) - lr * gradient)
  ```
 ### torch.nn VS torch.nn.functional
 >
