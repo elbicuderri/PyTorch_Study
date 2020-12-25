@@ -1,14 +1,3 @@
-"""
-Working code of a simple Fully Connected (FC) network training on MNIST dataset.
-The code is intended to show how to create a FC network as well
-as how to initialize loss, optimizer, etc. in a simple way to get
-training to work with function that checks accuracy as well.
-Video explanation: https://youtu.be/Jy4wM2X21u0
-Got any questions leave a comment on youtube :)
-Programmed by Aladdin Persson <aladdin.persson at hotmail dot com>
-*    2020-04-08 Initial coding
-"""
-
 # Imports
 import torch
 import torchvision
