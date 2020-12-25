@@ -13,8 +13,8 @@
         loss = loss_fn(out, label)
 
         optimizer.zero_grad() ## gradient initialized (어디에 있든 loss.backward() 앞에만 있으면 된다)
-        loss.backward() ## back propagation (gradient updated)
-        optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized))
+        loss.backward() ## back propagation (gradient(=dw(t) updated)
+        optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(=optimizer(dw(t))))
  ```
 ### torch.nn VS torch.nn.functional
 >
