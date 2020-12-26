@@ -16,10 +16,50 @@
         loss.backward() ## back propagation (gradient(=dw(t) updated)
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(=optimizer(dw(t))))
  ```
+ 
+### contiguous() 란
+>
+> pytorch에서는 tensor가 memory에 연속하여 올라가 있지 않으면 
+>
+> view(), transpose()같은 함수를 사용할 때 error가 발생한다.
+>
+> contiguous(), is_contiguous()
+
+### view() VS reshape()
+>
+> - view() : 기존 tensor와 같은 공간 공유. 기존 tensor가 바뀔 경우 같이 바뀜.
+>  
+>            반대도 성립.
+>
+> - reshape() : 기존 tensor를 copy하고 그 tensor를 다시 view하여 반환.
+>
+
+
+### detach() VS clone() 
+>
+> - detach() : 기존 tensor에서 gradient 전파 안 되는 tensor 생성
+>  
+>              단, 같은 공간 공유. 이 tensor가 바뀌면 기존 tensor도 바뀜.
+>
+> - clone() : 기존 tensor의 내용을 copy한 tensor 생성.
+>
+
+ 
+### tesnsor의 메모리 주소 확인
+
+```python
+x_ptr = x.storage().data_ptr()
+y_ptr = y.storage().data_ptr()
+if ( x_ptr == y_ptr):
+    ...
+```
+
+
 ### torch.nn VS torch.nn.functional
 >
 > **결론만 말하면 nn으로 통일해서 쓰자**
 > 
+
 
 ### model.summary() 하는 법
 ```python
