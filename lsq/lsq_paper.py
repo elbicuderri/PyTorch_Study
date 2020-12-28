@@ -16,8 +16,6 @@ def roundpass(x):
     y = yDetach + yGrad
     return y
 
-
-
 def quantize(v, s, p, isActivation=False):
     ## v : Input Tensor
     ## s : step size, a learnable parameter specific
@@ -27,22 +25,24 @@ def quantize(v, s, p, isActivation=False):
         Qn = 0
         Qp = 2**(p) - 1
 
-        num_of_activations = 1
-        for d in v.shape:
-            num_of_activations *= d
+        # num_of_activations = 1
+        # for d in v.shape:
+        #     num_of_activations *= d
 
         # num_of_activations = v.shape[0]*v.shape[1]*v.shape[2]*v.shape[3]
+        num_of_activations = v.numel()
         gradScaleFactor = 1 / sqrt(num_of_activations * Qp)
 
     else:
         Qn = -2**(p-1)
         Qp = 2**(p-1) - 1
 
-        num_of_weights = 1
-        for d in v.shape:
-            num_of_weights *= d
+        # num_of_weights = 1
+        # for d in v.shape:
+        #     num_of_weights *= d
 
         # num_of_weights = v.shape[0]*v.shape[1]*v.shape[2]*v.shape[3]
+        num_of_weights = v.numel()
         gradScaleFactor = 1 / sqrt(num_of_weights * Qp)
 
 
