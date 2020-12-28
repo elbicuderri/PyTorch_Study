@@ -61,7 +61,8 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(16)
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
         )
 
         self.block12 = nn.Sequential(
@@ -69,7 +70,8 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(16)
+            nn.BatchNorm2d(16),
+            nn.ReLU(),
         )
 
         self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1, stride=2, bias=False)
@@ -79,7 +81,8 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(32)
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
         )
 
         self.block22 = nn.Sequential(
@@ -87,7 +90,8 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(32)
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
         )
 
         self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1, stride=2, bias=False)
@@ -97,7 +101,8 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(64)
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
         )
 
         self.block32 = nn.Sequential(
@@ -105,7 +110,8 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(64)
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
         )
 
         self.avg_pool = nn.AvgPool2d(8)
