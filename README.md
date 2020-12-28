@@ -24,6 +24,7 @@
 > view(), transpose()같은 함수를 사용할 때 error가 발생한다.
 >
 > contiguous(), is_contiguous()
+>
 
 ### view() VS reshape()
 >
@@ -146,6 +147,20 @@ for epoch in range(epochs):
 >
 > 3번도 multi-label 문제에 쓰인다. [논문참고](https://arxiv.org/abs/1708.02002)
 >
+
+### unsqueeze(), squeeze(), view(), clamp()
+```python
+import torch
+x = torch.randn(16, 3, 32, 32)
+y = torch.randn(1, 3, 1, 8)
+
+a = x.view(16, -1)
+b = y.squeeze(0)
+c = y.unsqueeze(2)
+
+p = torch.arange(-10, 11)
+q = p.clamp(min=0)
+```
 
 
 ### einsum is all you need
