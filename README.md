@@ -76,7 +76,7 @@ make_dot(model(InTensor), params=dict(model.named_parameters())).render("model",
 ```
 
 
-### nn.CrossEntropyLoss() == nn.LogSoftmax() + nn.nLLLos()
+### nn.CrossEntropyLoss() == nn.LogSoftmax() + nn.NLLLoss()
 >
 > 이 두 방식은 똑같다.
 >
