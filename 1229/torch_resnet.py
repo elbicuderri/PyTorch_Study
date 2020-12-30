@@ -141,7 +141,7 @@ summary(model, input_size=(3, 32, 32))
 # make_dot(model(InTensor), params=dict(model.named_parameters())).render("model", format="png")
 
 batch_size = 32
-epochs = 3
+epochs = 5
 
 loss_fn = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -173,7 +173,6 @@ loss_dict = {}
 val_loss_dict = {}
 train_step = len(train_loader)
 val_step = len(valid_loader)
-epochs = 5
 
 for i in range(1, epochs + 1):
     loss_list = [] # losses of i'th epoch
