@@ -134,6 +134,26 @@ for epoch in range(epochs):
             variance_list.append(variance)
 ```
 
+> **+++ 다른 방법**
+
+```python
+# 1. define model
+model = ...
+
+# 2. register the hook
+model.bn_layer.register_forward_hook(printbn)
+
+# 3. the hook function will be called here
+model.forward(...)
+
+def printbn(self, input, output):
+    print('Inside ' + self.__class__.__name__ + ' forward')
+    mean = input[0].mean(dim=0)
+    var = input[0].var(dim=0)
+    print(mean)
+```
+[How to get the batch mean and variance inside BatchNorm?](https://discuss.pytorch.org/t/how-to-get-the-batch-mean-and-variance-inside-batchnorm/10487/11)
+
 
 ### nn.CrossEntropyLoss() VS nn.BCEWithLogitsLoss() VS Focal Loss
 >
