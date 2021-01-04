@@ -16,8 +16,34 @@
         loss.backward() ## back propagation (gradient(=dw(t) updated)
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(=optimizer(dw(t))))
  ```
+
+### DataParallel
+
+```python
+    gpu_num = torch.cuda.device_count()
+    if gpu_num > 1:
+        net = torch.nn.DataParallel(net, list(range(gpu_num))).cuda()
+        net2 = torch.nn.DataParallel(net2, list(range(gpu_num))).cuda()
+```
+
+### depthwise-seperable-convolution
+
+```python
+    def conv_dw(inp, oup, stride):
+        return nn.Sequential(
+            # dw
+            nn.Conv2d(inp, inp, 3, stride, 1, groups=inp, bias=False),
+            nn.BatchNorm2d(inp),
+            nn.ReLU(inplace=True),
+
+            # pw
+            nn.Conv2d(inp, oup, 1, 1, 0, bias=False),
+            nn.BatchNorm2d(oup),
+            nn.ReLU(inplace=True),
+            )
+```
  
-### contiguous() 란
+### contiguous() 
 >
 > pytorch에서는 tensor가 memory에 연속하여 올라가 있지 않으면 
 >
@@ -46,7 +72,7 @@
 >
 
  
-### tesnsor의 메모리 주소 확인
+### check the pointer ot tensor
 
 ```python
 x_ptr = x.storage().data_ptr()
@@ -58,11 +84,13 @@ if ( x_ptr == y_ptr):
 
 ### torch.nn VS torch.nn.functional
 >
-> **결론만 말하면 nn으로 통일해서 쓰자**
+> layer with weights --> torch.nn
+>
+> layer with no weights(activation) --> torch.nn or functional ok.
 > 
 
 
-### model.summary() 하는 법
+### model.summary()
 ```python
 from torchsummary import summary
 from torchviz import make_dot
@@ -169,23 +197,23 @@ def printbn(self, input, output):
 >
 
 ### unsqueeze(), squeeze(), view(), clamp()
+
 ```python
 import torch
 x = torch.randn(16, 3, 32, 32)
 y = torch.randn(1, 3, 1, 8)
 
-a = x.view(16, -1)
-b = y.squeeze(0)
-c = y.unsqueeze(2)
+a = x.view(16, -1) ## flatten
+b = y.squeeze(0) 
+c = y.unsqueeze(2) 
 
 p = torch.arange(-10, 11)
-q = p.clamp(min=0)
+q = p.clamp(min=0) ## relu
 ```
 
 
 ### einsum is all you need
-> 꼭 써라 두 번 써라
->
+> 
 > 바로 예제 코드를 보자
 >
 ```python
@@ -246,6 +274,5 @@ r = torch.einsum("nij, njk -> nik", p, q)
 
 print(r.shape)
 ```
-~~이거 뭐 사기 아니냐~~
 
 [docker study용 github](https://github.com/open-mmlab/mmdetection)
