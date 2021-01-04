@@ -8,6 +8,7 @@ import numpy as np
 # from torchviz import make_dot
 # from torch.autograd import Variable
 
+
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(device)
@@ -23,6 +24,7 @@ print(device)
                             # kernel_size=kernel_size, padding=padding, stride=stride, bias=bias),
 #             nn.BatchNorm2d(out_channels),        
 #         )
+
 
 class SimpleResNet(nn.Module):
     def __init__(self):
@@ -133,6 +135,7 @@ class SimpleResNet(nn.Module):
 
         return out
 
+
 model = SimpleResNet().to(device)
 
 summary(model, input_size=(3, 32, 32))
@@ -169,12 +172,14 @@ valid_loader = DataLoader(dataset=valid_dataset,
                                           batch_size=batch_size,
                                           shuffle=False)
 
+
 loss_dict = {}
 val_loss_dict = {}
 train_step = len(train_loader)
 val_step = len(valid_loader)
 
-for i in range(1, epochs + 1):
+
+for epoch in range(1, epochs + 1):
     loss_list = [] # losses of i'th epoch
     for train_step_idx, (img, label) in enumerate(train_loader):
         img = img.to(device)
@@ -191,9 +196,9 @@ for i in range(1, epochs + 1):
         loss_list.append(loss.item())
 
         if ((train_step_idx+1) % 100 == 0):
-            print(f"Epoch [{i}/{epochs}] Step [{train_step_idx + 1}/{train_step}] Loss: {loss.item():.4f}")
+            print(f"Epoch [{epoch}/{epochs}] Step [{train_step_idx + 1}/{train_step}] Loss: {loss.item():.4f}")
 
-    loss_dict[i] = loss_list
+    loss_dict[epoch] = loss_list
 
     val_loss_list = []
     for val_step_idx, (val_img, val_label) in enumerate(valid_loader):
@@ -207,16 +212,16 @@ for i in range(1, epochs + 1):
 
         val_loss_list.append(val_loss.item())
 
-    val_loss_dict[i] = val_loss_list
+    val_loss_dict[epoch] = val_loss_list
     
     torch.save({
-        f"epoch": i,
+        f"epoch": epoch,
         f"model_state_dict": model.state_dict(),
         f"optimizer_state_dict": optimizer.state_dict(),
-        f"loss": loss},
-            f"cifar10_epoch_{i}.ckpt")
+        f"loss": mean(loss_dict[epoch])},
+            f"checkpoint/cifar10_epoch_{epoch}.ckpt")
 
-    print(f"Epoch [{i}] Train Loss: {mean(loss_dict[i]):.4f} Val Loss: {mean(val_loss_dict[i]):.4f}")
+    print(f"Epoch [{epoch}] Train Loss: {mean(loss_dict[epoch]):.4f} Val Loss: {mean(val_loss_dict[epoch]):.4f}")
     print("========================================================================================")
 
-torch.save(model.state_dict(), 'resnet.pt')
+torch.save(model.state_dict(), 'model/resnet.pt')
