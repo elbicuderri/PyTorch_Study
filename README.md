@@ -17,6 +17,10 @@
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(=optimizer(dw(t))))
  ```
 
+### image data pipeline && train && deploy
+
+[link](https://urbanbase.github.io/dev/2019/12/17/Deep-Learning-Image-Classification.html)
+
 ### DataParallel
 
 ```python
