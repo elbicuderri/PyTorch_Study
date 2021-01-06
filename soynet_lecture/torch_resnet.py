@@ -175,12 +175,16 @@ valid_loader = DataLoader(dataset=valid_dataset,
 
 loss_dict = {}
 val_loss_dict = {}
+acc_dict = {}
+val_acc_dict = {}
 train_step = len(train_loader)
 val_step = len(valid_loader)
 
 
 for epoch in range(1, epochs + 1):
     loss_list = [] # losses of i'th epoch
+    num_correct = 0
+    num_samples = 0
     for train_step_idx, (img, label) in enumerate(train_loader):
         img = img.to(device)
         label = label.to(device)
@@ -188,6 +192,9 @@ for epoch in range(1, epochs + 1):
         model.train()
         output = model(img)
         loss = loss_fn(output, label)
+        _, predictions = output.max(1)
+        num_correct += (predictions == label).sum()
+        num_samples += predictions.size(0)
 
         optimizer.zero_grad()
         loss.backward()
@@ -196,11 +203,14 @@ for epoch in range(1, epochs + 1):
         loss_list.append(loss.item())
 
         if ((train_step_idx+1) % 100 == 0):
-            print(f"Epoch [{epoch}/{epochs}] Step [{train_step_idx + 1}/{train_step}] Loss: {loss.item():.4f}")
+            print(f"Epoch [{epoch}/{epochs}] Step [{train_step_idx + 1}/{train_step}] Loss: {loss.item():.4f} Accuracy: {(num_correct / num_samples) * 100:.4f}")
 
     loss_dict[epoch] = loss_list
+    acc_dict[epoch] = (num_correct / num_samples) * 100
 
     val_loss_list = []
+    val_num_correct = 0
+    val_num_samples = 0
     for val_step_idx, (val_img, val_label) in enumerate(valid_loader):
         with torch.no_grad():
             val_img = val_img.to(device)
@@ -209,19 +219,27 @@ for epoch in range(1, epochs + 1):
             model.eval()
             val_output = model(val_img)
             val_loss = loss_fn(val_output, val_label)
+            _, val_predictions = val_output.max(1)
+            val_num_correct += (val_predictions == val_label).sum()
+            val_num_samples += val_predictions.size(0)
 
         val_loss_list.append(val_loss.item())
 
     val_loss_dict[epoch] = val_loss_list
-    
-    torch.save({
+    val_acc_dict[epoch] = (val_num_correct / val_num_samples) * 100
+
+    torch.save(
+        {
         f"epoch": epoch,
         f"model_state_dict": model.state_dict(),
         f"optimizer_state_dict": optimizer.state_dict(),
-        f"loss": mean(loss_dict[epoch])},
-            f"checkpoint/cifar10_epoch_{epoch}.ckpt")
+        f"loss": mean(loss_dict[epoch]),
+        f"accuracy": acc_dict[epoch]
+        },
+        f"checkpoint/cifar10_epoch_{epoch}.ckpt")
 
     print(f"Epoch [{epoch}] Train Loss: {mean(loss_dict[epoch]):.4f} Val Loss: {mean(val_loss_dict[epoch]):.4f}")
+    print(f"Epoch [{epoch}] Train Accuracy: {acc_dict[epoch]:.4f} Val Accuracy: {val_acc_dict[epoch]:.4f}")
     print("========================================================================================")
 
 torch.save(model.state_dict(), 'model/resnet.pt')
