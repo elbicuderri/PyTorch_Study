@@ -41,7 +41,7 @@ transform = transforms.Compose([
  transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5)) 
 ]) # output[channel] = (input[channel] - mean[channel]) / std[channel]
 
-train_dataset = datasets.CIFAR10('train/',
+train_dataset = datasets.CIFAR10('~/data/cifar10/train/',
                                  train=True,
                                  download=True,
                                  transform=transform)
@@ -50,7 +50,7 @@ train_loader = DataLoader(dataset=train_dataset,
                             batch_size=batch_size,
                             shuffle=True)
 
-valid_dataset = datasets.CIFAR10(root='test/',
+valid_dataset = datasets.CIFAR10(root='~/data/cifar10/test/',
                                             train=False, 
                                             download=True,
                                             transform=transform)
@@ -75,7 +75,7 @@ for epoch in range(1, epochs + 1):
     print(f"[{epoch}/{epochs}] finished")
     print('==================')
 
-torch.save(model.state_dict(), 'cifar10_model.pt')
+torch.save(model.state_dict(), 'model/cifar10_model.pt')
 
 
 
