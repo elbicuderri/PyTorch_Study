@@ -19,7 +19,7 @@
  
 ### torch tensor float value count
 ```python
-np.unique((quantized_weight.view(-1).detach().numpy()), return_counts=True)
+values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_counts=True)
 ```
 
 ### image data pipeline && train && deploy
