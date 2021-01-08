@@ -14,16 +14,16 @@ def iou(box_pred, box_target, format="corner"):
         box2_y2 = box_target[..., 3:4]
         
     elif format=="center":
-        # (x, y, h, w)
-        box1_x1 = box_pred[..., 0:1] - box_pred[..., 3:4] / 2
-        box1_y1 = box_pred[..., 1:2] - box_pred[..., 2:3] / 2
-        box1_x2 = box_pred[..., 0:1] + box_pred[..., 3:4] / 2
-        box1_y2 = box_pred[..., 1:2] + box_pred[..., 2:3] / 2
+        # (x, y, w, h)
+        box1_x1 = box_pred[..., 0:1] - box_pred[..., 2:3] / 2
+        box1_y1 = box_pred[..., 1:2] - box_pred[..., 3:4] / 2
+        box1_x2 = box_pred[..., 0:1] + box_pred[..., 2:3] / 2
+        box1_y2 = box_pred[..., 1:2] + box_pred[..., 3:4] / 2
         
-        box2_x1 = box_target[..., 0:1] - box_target[..., 3:4] / 2
-        box2_y1 = box_target[..., 1:2] - box_target[..., 2:3] / 2
-        box2_x2 = box_target[..., 0:1] + box_target[..., 3:4] / 2
-        box2_y2 = box_target[..., 1:2] + box_target[..., 2:3] / 2
+        box2_x1 = box_target[..., 0:1] - box_target[..., 2:3] / 2
+        box2_y1 = box_target[..., 1:2] - box_target[..., 3:4] / 2
+        box2_x2 = box_target[..., 0:1] + box_target[..., 2:3] / 2
+        box2_y2 = box_target[..., 1:2] + box_target[..., 3:4] / 2
         
         x1 = torch.max(box1_x1, box2_x1)
         y1 = torch.max(box1_y1, box2_y1)
