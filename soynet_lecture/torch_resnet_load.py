@@ -12,7 +12,7 @@ class SimpleResNet(nn.Module):
         self.conv0 = nn.Sequential(
             nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, padding=1, stride=1, bias=False),
             nn.BatchNorm2d(16),
-            nn.ReLU()
+            nn.ReLU(),
         )
 
         self.block11 = nn.Sequential(
@@ -20,7 +20,7 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(16)
+            nn.BatchNorm2d(16),
         )
 
         self.block12 = nn.Sequential(
@@ -28,7 +28,7 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(16)
+            nn.BatchNorm2d(16),
         )
 
         self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1, stride=2, bias=False)
@@ -38,7 +38,7 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(32)
+            nn.BatchNorm2d(32),
         )
 
         self.block22 = nn.Sequential(
@@ -46,7 +46,7 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(32)
+            nn.BatchNorm2d(32),
         )
 
         self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1, stride=2, bias=False)
@@ -56,7 +56,7 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(64)
+            nn.BatchNorm2d(64),
         )
 
         self.block32 = nn.Sequential(
@@ -64,7 +64,7 @@ class SimpleResNet(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1, stride=1, bias=False),
-            nn.BatchNorm2d(64)
+            nn.BatchNorm2d(64),
         )
 
         self.avg_pool = nn.AvgPool2d(8)
@@ -73,27 +73,42 @@ class SimpleResNet(nn.Module):
 
     def forward(self, x):
         batch = x.size(0)
-
         out0 = self.conv0(x)
-        out1 = self.block11(out0)
-        out1 = self.block12(out1)
 
-        res2 = self.conv2(out1)
-        out2 = self.block21(out1)
-        out2 = self.block22(out2)
-        out2 += res2
-        out2 = self.relu(out2)
+        res11 = out0
+        out11 = self.block11(out0)
+        out11 += res11
+        out11 = self.relu(out11)
 
-        res3 = self.conv3(out2)
-        out3 = self.block31(out2)
-        out3 = self.block32(out3)
-        out3 += res3
-        out3 = self.relu(out3)
+        res12 = out11
+        out12 = self.block12(out11)
+        out12 += res12
+        out12 = self.relu(out12)
 
-        out3 = self.avg_pool(out3)
+        res21 = self.conv2(out12)
+        out21 = self.block21(out12)
+        out21 += res21
+        out21 = self.relu(out21)
+
+        res22 = out21
+        out22 = self.block22(out21)
+        out22 += res22
+        out22 = self.relu(out22)
+
+        res31 = self.conv3(out22)
+        out31 = self.block31(out22)
+        out31 += res31
+        out31 = self.relu(out31)
+
+        res32 = out31
+        out32 = self.block32(out31)
+        out32 += res32
+        out32 = self.relu(out32)
+
+        out4 = self.avg_pool(out32)
         # out3 = self.flatten(out3)
-        out3 = out3.view(batch, -1)
-        out = self.fc(out3)
+        out4 = out4.view(batch, -1)
+        out = self.fc(out4)
 
         return out
 
