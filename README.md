@@ -16,6 +16,11 @@
         loss.backward() ## back propagation (gradient(=dw(t) updated)
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(=optimizer(dw(t))))
  ```
+ 
+### torch tensor float value count
+```python
+values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_counts=True)
+```
 
 ### image data pipeline && train && deploy
 
