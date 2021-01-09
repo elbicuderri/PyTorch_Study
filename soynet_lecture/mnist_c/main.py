@@ -6,16 +6,51 @@ from torch.optim import Adam
 from torchvision.datasets import MNIST
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
-from torch.autograd import Variable
-
-print("Hi!")
-
-print(torch.cuda.is_available())
-print(torch.cuda.device_count())
-print(torch.cuda.get_device_name(0))
+from torchsummary import summary
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(device)
+
+class mnist_model(nn.Module):
+    def __init__(self):
+        super(mnist_model, self).__init__()
+        self.conv = Conv2d(1, 5, kernel_size=5, padding=2, bias=False)
+        self.batchnorm = BatchNorm2d(5, eps=0.001)
+        self.maxpool = MaxPool2d(2, stride=2)
+        self.dense1 = Linear(5 * 14 * 14, 120)
+        self.dense2 = Linear(120, 10)
+        self.mode = 0
+
+    def forward(self, x):
+        batch = x.size(0)
+        conv = self.conv(x)
+        batchnorm = self.batchnorm(conv)
+        maxpool = self.maxpool(batchnorm)
+        relu_maxpool = F.relu(maxpool)
+        flatten = relu_maxpool.view(batch, -1)
+        dense1 = self.dense1(flatten)
+        relu_dense1 = F.relu(dense1)
+        dense2 = self.dense2(relu_dense1)
+        result = F.softmax(dense2, dim=1)
+        
+        if self.mode == 1:
+            def save_value(value, name):
+                value_arr = value.cpu().data.numpy()
+                print(name, ": ", value_arr.shape)
+                value_arr.tofile(f"value/{name}_pytorch.bin")
+
+            value_list = [conv, batchnorm, maxpool, relu_maxpool, flatten, dense1, relu_dense1, dense2, result]
+            name_list = ["conv", "batchnorm", "maxpool", "relu_maxpool", "flatten", "dense1", "relu_dense1", "dense2", "result"]
+            for v, n in zip(value_list, name_list):
+                save_value(v, n)
+
+        return result
+
+model = mnist_model().to(device)
+
+summary(model, input_size=(1, 28, 28))
+# print(model)
+optimizer = Adam(model.parameters(), lr=0.001)
+
 batch_size = 100
 transform = ToTensor()
 
@@ -35,45 +70,6 @@ valid_loader = DataLoader(dataset=test_dataset, batch_size=1000, shuffle=False)
 test_loader = DataLoader(dataset=test_dataset, batch_size=10000, shuffle=False)
 
 print("data ready")
-
-class mnist_model(nn.Module):
-    def __init__(self):
-        super(mnist_model, self).__init__()
-        self.conv = Conv2d(1, 5, kernel_size=5, padding=2, bias=False)
-        self.batchnorm = BatchNorm2d(5, eps=0.001)
-        self.maxpool = MaxPool2d(2, stride=2)
-        self.dense1 = Linear(5 * 14 * 14, 120)
-        self.dense2 = Linear(120, 10)
-        self.mode = 0
-
-    def forward(self, x):
-        x = x.float()
-        conv = self.conv(x)
-        batchnorm = self.batchnorm(conv)
-        maxpool = self.maxpool(batchnorm)
-        relu_maxpool = F.relu(maxpool)
-        flatten = relu_maxpool.view(-1, 5 * 14 * 14)
-        dense1 = self.dense1(flatten)
-        relu_dense1 = F.relu(dense1)
-        dense2 = self.dense2(relu_dense1)
-        result = F.softmax(dense2, dim=1)
-        if self.mode == 1:
-            def save_value(value, name):
-                value_arr = value.cpu().data.numpy()
-                print(name, ": ", value_arr.shape)
-                value_arr.tofile(f"value/{name}_pytorch.bin")
-
-            value_list = [conv, batchnorm, maxpool, relu_maxpool, flatten, dense1, relu_dense1, dense2, result]
-            name_list = ["conv", "batchnorm", "maxpool", "relu_maxpool", "flatten", "dense1", "relu_dense1", "dense2", "result"]
-            for v, n in zip(value_list, name_list):
-                save_value(v, n)
-
-        return result
-
-
-model = mnist_model().to(device)
-# print(model)
-optimizer = Adam(model.parameters(), lr=0.001)
 
 def train(epoch):
     model.train()

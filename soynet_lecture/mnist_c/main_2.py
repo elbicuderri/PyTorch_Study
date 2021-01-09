@@ -6,36 +6,9 @@ from torch.optim import Adam
 from torchvision.datasets import MNIST
 from torchvision.transforms import ToTensor
 from torch.utils.data import DataLoader
-from torch.autograd import Variable
 from torchsummary import summary
 
-print("Hi!")
-
-print(torch.cuda.is_available())
-print(torch.cuda.device_count())
-print(torch.cuda.get_device_name(0))
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(device)
-batch_size = 100
-transform = ToTensor()
-
-#image to Tensor -> image, label
-train_dataset = MNIST('../mnist_data/',
-                               download=True,
-                               train=True,
-                               transform=transform)
-
-test_dataset = MNIST("../mnist_data/",
-                              train=False,
-                              download=True,
-                              transform=transform)
-
-train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-valid_loader = DataLoader(dataset=test_dataset, batch_size=1000, shuffle=False)
-test_loader = DataLoader(dataset=test_dataset, batch_size=10000, shuffle=False)
-
-print("data ready")
 
 class mnist_model(nn.Module):
     def __init__(self):
@@ -48,7 +21,6 @@ class mnist_model(nn.Module):
         self.mode = 0
 
     def forward(self, x):
-        x = x.float()
         batch = x.size(0)
         conv = self.conv(x)
         batchnorm = self.batchnorm(conv)
@@ -72,12 +44,31 @@ class mnist_model(nn.Module):
 
         return result
 
-
 model = mnist_model().to(device)
 
 summary(model, input_size=(1, 28, 28))
 # print(model)
 optimizer = Adam(model.parameters(), lr=0.001)
+
+batch_size = 100
+transform = ToTensor()
+
+#image to Tensor -> image, label
+train_dataset = MNIST('../mnist_data/',
+                               download=True,
+                               train=True,
+                               transform=transform)
+
+test_dataset = MNIST("../mnist_data/",
+                              train=False,
+                              download=True,
+                              transform=transform)
+
+train_loader = DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
+valid_loader = DataLoader(dataset=test_dataset, batch_size=1000, shuffle=False)
+test_loader = DataLoader(dataset=test_dataset, batch_size=10000, shuffle=False)
+
+print("data ready")
 
 def train(epoch):
     model.train()
