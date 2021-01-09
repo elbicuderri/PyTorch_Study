@@ -242,12 +242,12 @@ print(x)
 print(xx)
 
 #sum by column
-sum_by_column = torch.einsum("ij -> j", x) -> column만 남기므로 칼럼방향으로 더하는것
+sum_by_column = torch.einsum("ij -> j", x) # column만 남기므로 칼럼방향으로 더하는것
 
 print(sum_by_column)
 
 #sum by row
-sum_by_row = torch.einsum("ij -> i", x) -> 위와 동일
+sum_by_row = torch.einsum("ij -> i", x) # 위와 동일
 
 print(sum_by_row)
 
@@ -255,7 +255,7 @@ print(sum_by_row)
 a = torch.randn(127, 34)
 b = torch.rand(13, 34)
 
-c = torch.einsum("ij, kj -> ik", a, b) -> ( i , j ) x ( k , j ) == ( i , k ) :  
+c = torch.einsum("ij, kj -> ik", a, b) # ( i , j ) x ( k , j ) == ( i , k ) :  
 
 print(c.shape)
 
