@@ -13,8 +13,8 @@
         loss = loss_fn(out, label)
 
         optimizer.zero_grad() ## gradient initialized (어디에 있든 loss.backward() 앞에만 있으면 된다)
-        loss.backward() ## back propagation (gradient(=dw(t) updated)
-        optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(=optimizer(dw(t))))
+        loss.backward() ## back propagation (gradient(==dw(t)) updated)
+        optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(==optimizer(dw(t))))
  ```
  
 ### torch tensor float value count
@@ -81,7 +81,7 @@ values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_
 >
 
  
-### check the pointer ot tensor
+### check the pointer of tensor
 
 ```python
 x_ptr = x.storage().data_ptr()
@@ -105,7 +105,7 @@ from torchsummary import summary
 from torchviz import make_dot
 from torch.autograd import Variable
 
-model = SimpleResNet().to(device)
+model = Model().to(device)
 summary(model, input_size=(3, 32, 32))
 
 InTensor = Variable(torch.randn(1, 3, 32, 32)).to(device)
@@ -231,23 +231,23 @@ import torch
 #sum of tensor
 x = torch.randn(3, 5)
 
-sum_of_tensor = torch.einsum("ij ->", x)
+sum_of_tensor = torch.einsum("ij ->", x) # (3, 5) -> 0차원으로 만드니 더한다고 생각하면 됨.
 
 print(sum_of_tensor)
 
 #transpose!!
-xx = torch.einsum("ij -> ji", x)
+xx = torch.einsum("ij -> ji", x) # (i, j) -> (j, i) 
 
 print(x)
 print(xx)
 
 #sum by column
-sum_by_column = torch.einsum("ij -> j", x)
+sum_by_column = torch.einsum("ij -> j", x) -> column만 남기므로 칼럼방향으로 더하는것
 
 print(sum_by_column)
 
 #sum by row
-sum_by_row = torch.einsum("ij -> i", x)
+sum_by_row = torch.einsum("ij -> i", x) -> 위와 동일
 
 print(sum_by_row)
 
@@ -255,7 +255,7 @@ print(sum_by_row)
 a = torch.randn(127, 34)
 b = torch.rand(13, 34)
 
-c = torch.einsum("ij, kj -> ik", a, b)
+c = torch.einsum("ij, kj -> ik", a, b) -> ( i , j ) x ( k , j ) == ( i , k ) :  
 
 print(c.shape)
 
