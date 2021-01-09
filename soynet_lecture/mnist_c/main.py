@@ -1,11 +1,8 @@
 import torch
 import torch.nn as nn
-from torch.nn import Conv2d, BatchNorm2d, MaxPool2d, Linear
 import torch.nn.functional as F
-from torch.optim import Adam
-from torchvision.datasets import MNIST
+from torch.utils.data import DataLoader, datasets
 from torchvision.transforms import ToTensor
-from torch.utils.data import DataLoader
 from torchsummary import summary
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -13,11 +10,11 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class mnist_model(nn.Module):
     def __init__(self):
         super(mnist_model, self).__init__()
-        self.conv = Conv2d(1, 5, kernel_size=5, padding=2, bias=False)
-        self.batchnorm = BatchNorm2d(5, eps=0.001)
-        self.maxpool = MaxPool2d(2, stride=2)
-        self.dense1 = Linear(5 * 14 * 14, 120)
-        self.dense2 = Linear(120, 10)
+        self.conv = nn.Conv2d(1, 5, kernel_size=5, padding=2, bias=False)
+        self.batchnorm = nn.BatchNorm2d(5, eps=0.001)
+        self.maxpool = nn.MaxPool2d(2, stride=2)
+        self.dense1 = nn.Linear(5 * 14 * 14, 120)
+        self.dense2 = nn.Linear(120, 10)
         self.mode = 0
 
     def forward(self, x):
@@ -49,18 +46,18 @@ model = mnist_model().to(device)
 
 summary(model, input_size=(1, 28, 28))
 # print(model)
-optimizer = Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 batch_size = 100
 transform = ToTensor()
 
 #image to Tensor -> image, label
-train_dataset = MNIST('../mnist_data/',
+train_dataset = datasets.MNIST('../mnist_data/',
                                download=True,
                                train=True,
                                transform=transform)
 
-test_dataset = MNIST("../mnist_data/",
+test_dataset = datasets.MNIST("../mnist_data/",
                               train=False,
                               download=True,
                               transform=transform)
