@@ -284,4 +284,4 @@ r = torch.einsum("nij, njk -> nik", p, q)
 print(r.shape)
 ```
 
-[docker study용 github](https://github.com/open-mmlab/mmdetection)
+[docker 활용 github 돌리기 예제 github](https://github.com/open-mmlab/mmdetection)
