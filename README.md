@@ -173,26 +173,24 @@ for epoch in range(epochs):
             variance_list.append(variance)
 ```
 
-> **+++ 다른 방법**
+### (추가)model.pt 에서 block안에 있는 bn의 mean과 var를 얻는 법
 
 ```python
-# 1. define model
-model = ...
-
-# 2. register the hook
-model.bn_layer.register_forward_hook(printbn)
-
-# 3. the hook function will be called here
-model.forward(...)
-
-def printbn(self, input, output):
-    print('Inside ' + self.__class__.__name__ + ' forward')
-    mean = input[0].mean(dim=0)
-    var = input[0].var(dim=0)
-    print(mean)
+# 예를 들어 이런 block이 있으면
+        self.block1 = nn.Sequential(
+            nn.Conv2d(in_channels=4, out_channels=8, kernel_size=3, padding=1, stride=2, bias=False),
+            nn.BatchNorm2d(8),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, padding=1, stride=1, bias=False),
+            nn.BatchNorm2d(8),
+        )
+        
+model.block1._modules['1'].running_mean.cpu().data.numpy()
+model.block1._modules['1'].running_var.cpu().data.numpy()
+model.block1._modules['4'].running_mean.cpu().data.numpy()
+model.block1._modules['4'].running_var.cpu().data.numpy()
+# 이렇게 하면 얻을 수 있다... 
 ```
-[How to get the batch mean and variance inside BatchNorm?](https://discuss.pytorch.org/t/how-to-get-the-batch-mean-and-variance-inside-batchnorm/10487/11)
-
 
 ### nn.CrossEntropyLoss() VS nn.BCEWithLogitsLoss() VS Focal Loss
 >
