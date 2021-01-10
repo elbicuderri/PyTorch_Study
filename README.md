@@ -58,7 +58,9 @@ values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_
 >
 > view(), transpose()같은 함수를 사용할 때 error가 발생한다.
 >
-> contiguous(), is_contiguous()
+> contiguous() -> contiguous 하게 해줌 
+> 
+> is_contiguous() -> contiguous 인지 확인
 >
 
 ### view() VS reshape()
