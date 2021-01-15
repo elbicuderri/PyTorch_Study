@@ -16,6 +16,11 @@
         loss.backward() ## back propagation (gradient(==dw(t)) updated)
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(==optimizer(dw(t))))
  ```
+
+### torch static graph
+```python
+@torch.jit.script
+```
  
 ### torch tensor float value count
 ```python
