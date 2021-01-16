@@ -1,5 +1,6 @@
 # PyTorch_Study
 
+[PyTorch Cheat Sheet](https://pytorch.org/tutorials/beginner/ptcheat.html)
 
 ### 외우자 이 아홉줄
 
