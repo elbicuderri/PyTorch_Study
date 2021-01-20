@@ -57,7 +57,17 @@ values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_
             nn.ReLU(inplace=True),
             )
 ```
- 
+
+### 메서드 with underbar(_)
+> 
+> - 언더바가 있다면 : in_place (새로운 tensor가 생기지 않고 기존 tensor 변경)
+>   
+> - 언더바가 없다면 : 새로운 tensor를 리턴
+> 
+> 거의 대부분의 메소드는 언더바 버전이 있기때문에 참고하면 좋다.
+> 
+
+
 ### contiguous() 
 >
 > pytorch에서는 tensor가 memory에 연속하여 올라가 있지 않으면 
@@ -78,8 +88,11 @@ values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_
 > - reshape() : 기존 tensor를 copy하고 그 tensor를 다시 view하여 반환.
 >
 
+###  transpose() & permute()
 
-### detach() VS clone() 
+
+
+### detach() VS clone() vs data
 >
 > - detach() : 기존 tensor에서 gradient 전파 안 되는 tensor 생성
 >  
@@ -87,7 +100,8 @@ values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_
 >
 > - clone() : 기존 tensor의 내용을 copy한 tensor 생성.
 >
-
+> - data : detach() 와 똑같다. gradient계산이 잘못되어도 error 발생이 안됨. 사용하지 말자.
+> 
  
 ### check the pointer of tensor
 
@@ -191,10 +205,10 @@ for epoch in range(epochs):
             nn.BatchNorm2d(8),
         )
         
-model.block1._modules['1'].running_mean.cpu().data.numpy()
-model.block1._modules['1'].running_var.cpu().data.numpy()
-model.block1._modules['4'].running_mean.cpu().data.numpy()
-model.block1._modules['4'].running_var.cpu().data.numpy()
+model.block1._modules['1'].running_mean.cpu().detach().numpy()
+model.block1._modules['1'].running_var.cpu().detach().numpy()
+model.block1._modules['4'].running_mean.cpu().detach().numpy()
+model.block1._modules['4'].running_var.cpu().detach().numpy()
 # 이렇게 하면 얻을 수 있다... 
 ```
 
