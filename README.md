@@ -89,8 +89,11 @@ values, counts = np.unique((quantized_weight.view(-1).detach().numpy()), return_
 >
 
 ###  transpose() & permute()
-
-
+> 
+> - transpose() : 2개의 차원을 변경하는데 사용
+> 
+> - permute() : 모든 차원의 순서를 재배치
+>
 
 ### detach() VS clone() vs data
 >
