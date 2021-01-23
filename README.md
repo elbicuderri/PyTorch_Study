@@ -204,13 +204,10 @@ make_dot(model(InTensor), params=dict(model.named_parameters())).render("model",
 >
 
 
-### PyTorch에서 batchnorm의 mean과 variance를 얻기가 은근 어렵다
+### PyTorch에서 batchnorm의 mean과 variance를 얻는 방법
 >
-> 일단 찾아낸 방법...
+> 100% 확신은 안 선다.
 >
-> 정확하지 않은데... 약간 더 세밀한 debugging이 필요하다...
->
-
 ```python
 mean_list = []
 variance_list = []
@@ -218,8 +215,8 @@ variance_list = []
 for epoch in range(epochs):
     # 대충 train loop...
         model.train()
-        mean = model.batchnorm.running_mean.clone()
-        variance = model.batchnorm.running_var.clone()
+        mean = model.batchnorm.running_mean.clone() # mean을 추적한다.
+        variance = model.batchnorm.running_var.clone() # variance을 추적한다.
     # 대충 evaluation loop...
         model.eval()
             mean_list.append(mean)
@@ -266,8 +263,8 @@ x = torch.randn(16, 3, 32, 32)
 y = torch.randn(1, 3, 1, 8)
 
 a = x.view(16, -1) ## flatten
-b = y.squeeze(0) 
-c = y.unsqueeze(2) 
+b = y.squeeze(0) ## 차원이 하나 줄어든다.
+c = y.unsqueeze(2) ## 차원이 하나 늘어난다.
 
 p = torch.arange(-10, 11)
 q = p.clamp(min=0) ## relu
