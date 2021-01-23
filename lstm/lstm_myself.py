@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn 
+import torch.autograd as autograd
 
 class LSTMCell(nn.Module):
     def __init__(self, input_size, hidden_size):
@@ -60,9 +61,9 @@ class LSTMCell_V2(nn.Module):
         
         return out, hidden_state, cell_state
     
-class LSTM(nn.Module): 
+class MYLSTM(nn.Module): 
     def __init__(self, input_size, hidden_size, num_layers, bidirectional=False):
-        super(LSTM, self).__init__()
+        super(MYLSTM, self).__init__()
         
         self.input_size = input_size
         self.hidden_size = hidden_size
@@ -85,17 +86,32 @@ class LSTM(nn.Module):
         out_list = torch.zeros(seq_len, batch, self.hidden_size) # (seq_len, batch, hidden_size)
         # hidden_states = torch.zeros(self.num_layers, batch, self.hidden_size) # (num_layers, batch, hidden_size)
         # cell_states = torch.zeros(self.num_layers, batch, self.hidden_size) # (num_layers, batch, hidden_size)
+        
+        o_previous = torch.zeros(1, batch, self.hidden_size)
+        h_previous = torch.zeros(1, batch, self.hidden_size)
+        c_previous = torch.zeros(1, batch, self.hidden_size)
+        
+        h_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) hidden states list
+        c_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) cell states list
 
         for l in range(seq_len):
             # out_list = torch.zeros(seq_len, batch, self.hidden_size)
+            
+            #=======================================================================
+            # h_previous = None
+            # o_previous = None
+            # if (l == 0):
+            #     o_previous = torch.zeros(1, batch, self.hidden_size)
+            #     h_previous = torch.zeros(1, batch, self.hidden_size)
+            #     c_previous = torch.zeros(1, batch, self.hidden_size)
+            #=======================================================================
+            
+            # h_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) hidden states list
+            # c_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) cell states list
 
-            o_previous = torch.zeros(1, batch, self.hidden_size)
-            h_previous = torch.zeros(1, batch, self.hidden_size)
-            c_previous = torch.zeros(1, batch, self.hidden_size)
-
-            h_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) hidden states list
-            c_previous_list = torch.zeros(self.num_layers, batch, self.hidden_size) # (t-1) cell states list
-
+            #=======================================================================
+            
+            
             if (l == 0):
                 output = 0.0
                 for layer_num in range(self.num_layers):
@@ -125,19 +141,50 @@ class LSTM(nn.Module):
                     output = o_previous # last output
                 out_list[l,:,:] = output # l
                                              
-        return out_list
+        return out_list, h_previous_list, c_previous_list
     
 
-seq_len = 100
-batch = 16
-input_size = 16
-hidden_size = 32
-num_layers = 16
+
+class LSTMNet(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers):
+        super(LSTMNet, self).__init__()
+        
+        self.input_size = input_size
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+    
+        self.lstm = nn.LSTM(input_size=self.input_size, hidden_size=self.hidden_size, num_layers=self.num_layers)
+        
+    def forward(self, x, hidden_0, cell_0):
+            
+        out, (h_n, c_n) = self.lstm(x, (hidden_0, cell_0))
+        
+        return out, h_n, c_n
+
+
+seq_len = 2
+batch = 2
+input_size = 2
+hidden_size = 4
+num_layers = 4
 
 InTensor = torch.randn(seq_len, batch, input_size)
 
-model = LSTM(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers)
+zero_tensor = torch.zeros(num_layers, batch, hidden_size)
 
-out = model(InTensor) # (seq_len, batch, hidden_size)
+model = MYLSTM(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers)
+
+out, _, _ = model(InTensor) # (seq_len, batch, hidden_size)
+
+origin_model = LSTMNet(input_size, hidden_size, num_layers)
+
+out_origin, _, _ = origin_model(InTensor, zero_tensor, zero_tensor)
+
+print(out_origin)
+
+print(out)
+
+
+print(out_origin.size())
 
 print(out.size())
