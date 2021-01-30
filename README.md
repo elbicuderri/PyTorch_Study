@@ -17,6 +17,24 @@
         loss.backward() ## back propagation (gradient(==dw(t)) updated)
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(==optimizer(dw(t))))
  ```
+ 
+### control the randomness
+```python
+import torch
+import numpy as np
+import random
+
+random_seed = 31
+
+torch.manual_seed(random_seed)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+torch.cuda.manual_seed(random_seed)
+torch.cuda.manual_seed_all(random_seed) # if use multi-GPU
+
+np.random.seed(random_seed)
+random.seed(random_seed)
+```
 
 ### about the ConvTranspose2d
 ```python
