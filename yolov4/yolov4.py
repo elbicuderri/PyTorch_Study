@@ -2,11 +2,11 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 from .torch_utils import *
-from tool.yolo_layer import YoloLayer
-import trtorch
+from .yolo_layer import YoloLayer
 import numpy as np
-
 import time
+
+import trtorch
 
 class Mish(torch.nn.Module):
     def __init__(self):
