@@ -289,10 +289,7 @@ q = p.clamp(min=0) ## relu
 ```
 
 
-### einsum is all you need
-> 
-> 바로 예제 코드를 보자
->
+### einsum 
 ```python
 import torch
 
