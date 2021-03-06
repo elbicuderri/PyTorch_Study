@@ -17,7 +17,26 @@
         loss.backward() ## back propagation (gradient(==dw(t)) updated)
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(==optimizer(dw(t))))
  ```
- 
+
+### L2 regularization
+
+```python
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5) # weight_decay -> L2 penalty (default: 0)
+```
+
+### L1 regularization
+[reference link](https://stackoverflow.com/questions/58172188/how-to-add-l1-regularization-to-pytorch-nn-model)
+```python
+def l1_regularizer(model, lambda_l1=0.01):
+    l1_loss = 0
+    for model_param_name, model_param_value in model.named_parameters():
+            if model_param_name.endswith('weight'):
+                l1_loss += lambda_l1 * model_param_value.abs().sum()
+    return l1_loss
+```
+
+
+
 ### control the randomness
 ```python
 import torch
