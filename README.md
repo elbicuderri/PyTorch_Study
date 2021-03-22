@@ -18,6 +18,24 @@
         optimizer.step() ## weight updated (w(t) = w(t-1) - lr * (gradient optimized(==optimizer(dw(t))))
  ```
 
+### Tensor shape, stride, offset
+```python
+# stride
+>>> x = torch.Tensor([[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]])
+>>> x.stride()
+(5, 1)
+
+>>> x.t().stride()
+(1, 5)
+
+# offset
+>>> x = torch.tensor([1, 2, 3, 4, 5])
+>>> x.storage_offset()
+0
+>>> x[3:].storage_offset()
+3
+```
+
 ### L2 regularization
 
 ```python
