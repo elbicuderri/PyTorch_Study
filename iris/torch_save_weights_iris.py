@@ -29,9 +29,6 @@ for name, weight in net.named_parameters():
     print(name, weight.shape)
 
 with open("torch_iris_weight.bin", "wb") as f:
-    # 처음 40bytes는 float32(0) * 10개를 채워준다.
-    (np.asarray([0 for _ in range(10)], dtype=np.float32)).tofile(f)
-
     for weight in net.parameters():
         """
         w = np.asarray(weight.cpu().detach(), dtype=np.float32)
