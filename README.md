@@ -39,7 +39,8 @@
 ### L2 regularization
 
 ```python
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5) # weight_decay -> L2 penalty (default: 0)
+# weight_decay -> L2 penalty (default: 0)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4, weight_decay=1e-5) 
 ```
 
 ### L1 regularization
